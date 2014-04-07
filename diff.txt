@@ -1,8 +1,6 @@
-diff --git a/ExamplePlugin.php b/ExamplePlugin.php
-index 160e038..f5e2ed3 100644
---- a/ExamplePlugin.php
-+++ b/ExamplePlugin.php
-@@ -2,52 +2,68 @@
+<!-- Edited by PEMapModder on 7/4/2014 GMT+8 17:26: Better readability-->
+
+<?php
  
  // description
  
@@ -51,26 +49,29 @@ index 160e038..f5e2ed3 100644
  	}
  	// initialize
 -	public function init(){
++	public function onEnable(){
+		// events
 -		$this->api->addHandler("player.block.touch", array($this, "eventHandler"), 10);
++		$this->getServer()->getPluginManager()->registerEvent("BlockBreakEvent", $this, EventPriority::HIGH, new MyEventExecutor(array($this, "eventHandler")), $this, false);
++		$this->getServer()->getPluginManager()->registerEvent("BlockPlaceEvent", $this, EventPriority::HIGH, new MyEventExecutor(array($this, "eventHandler")), $this, false);
+		// command /echo
 -		$this->api->console->register("echo", "echos a command to console", array($this, "commandHandler"));
 -		$this->api->console->alias("ec", "echo");
 -		$this->api->console->alias("eh", "echo");
--		$this->api->schedule(1200, array($this, "delayedFunction"), array("item 0", "item 1"), false);
--		$this->api->schedule(700, array($this, "repeatedFunction"), array("item 2", "item 3"), true);
-+	public function onEnable(){
-+		$this->getServer()->getPluginManager()->registerEvent("BlockBreakEvent", $this, EventPriority::HIGH, new MyEventExecutor(array($this, "eventHandler")), $this, false);
-+		$this->getServer()->getPluginManager()->registerEvent("BlockPlaceEvent", $this, EventPriority::HIGH, new MyEventExecutor(array($this, "eventHandler")), $this, false);
 +		$command = new PluginCommand("echo", $this);
 +		$command->setDescription("echos a command to console");
 +		$command->setAliases(array("ec", "eh")); // just some examples...
 +		$command->register($this->getServer()->getCommandMap());
 +		// You could have done this with plugin.yml
+		// schedule
+-		$this->api->schedule(1200, array($this, "delayedFunction"), array("item 0", "item 1"), false);
+-		$this->api->schedule(700, array($this, "repeatedFunction"), array("item 2", "item 3"), true);
 +		$this->getServer()->getScheduler()->scheduleDelayedTask(
 +				new MyCallbackPluginTask(array($this, "delayedFunction"), array("item 0", "item 1"), $this), 1200);
 +		$this->getServer()->getScheduler()->scheduleRepeatedTask(
 +				new MyCallbackPluginTask(array($this, "repeatedFunction"), array("item 2", "item 3"), $this), 700);
  	}
- 	// end
+ 	// finalize
 -	public function __destruct(){
 +	public function onDisable(){
  	}
