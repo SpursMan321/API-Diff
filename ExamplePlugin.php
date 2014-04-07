@@ -15,6 +15,8 @@ apiversion=12
 
 // no namespaces needed
 
+// main plugin class
+
 class AnOldApiPlugin implements Plugin{
 	// start
 	public function __construct(ServerAPI $api, $server = false){
@@ -64,3 +66,5 @@ class AnotherRandomClass{
 		$this->server = ServerAPI::request();
 	}
 }
+
+// EOF
